@@ -1,7 +1,7 @@
 import socket
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from colorama import init, Fore
+from colorama import init, Fore, Style
 import requests
 import time
 
@@ -65,6 +65,8 @@ def send_telegram_message(message, chat_id, bot_token):
         print("Mensagem enviada para o Telegram.")
 
 def main():
+    print(f"{Fore.GREEN}{Style.BRIGHT}Pressione Enter quando estiver no dados movel...{Style.RESET_ALL}")
+    input("")
     cloudfront_host = "d1rsm6mlg3ld3j.cloudfront.net"
 
     # Ler hosts a partir do arquivo hosts.txt
