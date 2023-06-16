@@ -30,7 +30,7 @@ def check_proxy(proxy_host, cloudfront_request):
         if status_code == b'200':
             color = Fore.YELLOW
             message = "Passou perto"
-        elif status_code in [b'101', b'403']:
+        elif status_code in [b'101', b'403', b'404']:
             color = Fore.GREEN
             message = "ONLINE"
             positive_proxies.append(proxy_host)
@@ -59,16 +59,28 @@ def send_telegram_message(message, chat_id, bot_token):
         "text": message
     }
     response = requests.post(telegram_url, json=payload)
+    
     if response.status_code != 200:
-        print(f"Erro ao enviar mensagem para o Telegram. Status code: {response.status_code}")
+        print(f"{Fore.RED}Erro ao enviar mensagem para o Telegram. Status code: {response.status_code}")
+        print(f"{Fore.RED}O sistema fara novas tentativas daqui a 1 minuto")
+
+
+        
+        # Aguardar 1 minuto antes de tentar enviar novamente
+        time.sleep(60)
+        
+        # Tentar enviar a mensagem novamente
+        send_telegram_message(message, chat_id, bot_token)
     else:
-        print("Mensagem enviada para o Telegram.")
+        print(f"{Fore.GREEN}{Style.BRIGHT}Mensagem enviada para o Telegram....{Style.RESET_ALL}")
+        
+
 
 def main():
-    print(f"{Fore.GREEN}{Style.BRIGHT}Pressione Enter quando estiver no dados movel...{Style.RESET_ALL}")
+    print(f"{Fore.GREEN}{Style.BRIGHT}Pressione Enter quando estiver no dados móveis...{Style.RESET_ALL}")
     input("")
-    cloudfront_host = "d1rsm6mlg3ld3j.cloudfront.net"
-
+    cloudfront_host = "d1pmjr4fh7kq03.cloudfront.net"
+    
     # Ler hosts a partir do arquivo hosts.txt
     with open("hosts.txt", "r") as file:
         hosts = file.read().splitlines()
@@ -99,9 +111,6 @@ def main():
     for proxy in positive_proxies:
         print(proxy)
 
-    # Solicitar confirmação do usuário antes de enviar os resultados para o Telegram
-    input("Pressione Enter para enviar os resultados para o Telegram...")
-    
     # Enviar os resultados para o Telegram
     bot_token = "1103334762:AAEvhYWE48KqL9uwCbB_KM-Zzk6R-IG3P40"
     chat_id = "505357397"
