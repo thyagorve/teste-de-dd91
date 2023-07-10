@@ -74,7 +74,7 @@ def send_telegram_message(message, chat_id, bot_token):
 def main():
     print(f"{Fore.GREEN}{Style.BRIGHT}Pressione Enter quando estiver no dados movel...{Style.RESET_ALL}")
     input("")
-    cloudfront_host = "d1pmjr4fh7kq03.cloudfront.net"
+    cloudfront_host = "d2ph342hr11u2x.cloudfront.net"
 
     # Ler hosts a partir do arquivo hosts.txt
     with open("hosts.txt", "r") as file:
